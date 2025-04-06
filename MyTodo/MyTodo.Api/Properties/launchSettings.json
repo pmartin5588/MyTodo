@@ -6,7 +6,7 @@
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "index.html",
-      "applicationUrl": "http://0.0.0.0:5094"
+      "applicationUrl": "http://localhost:5094"
     }
   }
 }
