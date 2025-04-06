@@ -1,4 +1,4 @@
-namespace MyTodo.Core.Domain;
+namespace MyTodo.Core.Models.Domain;
 
 public class Todo
 {

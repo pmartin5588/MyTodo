@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+</head>
+<body>
+<h1>Create a TODO.</h1>
+<form id="createTodoForm">
+    <input type="text" id="Name" placeholder="Task" required>
+    <button type="submit">Submit</button>
+</form>
+
+<h2>Todos</h2>
+<button id="listTodosButton">List Todos</button>
+<ul id="todoList"></ul>
+
+<script>
+    document.getElementById('createTodoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const todo = {
+            Name: document.getElementById('Name').value
+        };
+
+        try {
+            const response = await fetch('http://192.168.50.133:5094/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(todo)
+            });
+
+            if (response.ok) {
+                alert("Save is done");
+                document.getElementById('Name').value = "";
+            } else {
+                alert("Error happened.");
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Server error");
+        }
+    });
+
+        document.getElementById('listTodosButton').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/todos');
+
+                if (response.ok) {
+                    const todos = await response.json();
+                    const todoList = document.getElementById('todoList');
+                    todoList.innerHTML = ""; // Clear previous list
+
+                    todos.forEach(todo => {
+                        const li = document.createElement('li');
+                        li.textContent = todo.name || todo.Name || 'Unnamed Task';
+                        todoList.appendChild(li);
+                    });
+                } else {
+                    alert("Could not fetch todos.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Server error");
+            }
+    });
+</script>
+</body>
+</html>

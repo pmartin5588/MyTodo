@@ -10,13 +10,17 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ITodoServices, TodoServices>();
 builder.Services.AddScoped<ITodoRepository, TodoRepository>();
 
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
-app.UseRouting();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseDefaultFiles();
 app.UseStaticFiles();
-app.MapControllerRoute(
-        name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.UseRouting();
 
 app.MapControllers();
 

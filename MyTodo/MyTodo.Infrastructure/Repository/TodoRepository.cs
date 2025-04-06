@@ -1,4 +1,4 @@
-using MyTodo.Core.Domain;
+using MyTodo.Core.Models.Domain;
 using MyTodo.Core.Repository;
 using Npgsql;
 
@@ -13,10 +13,10 @@ public class TodoRepository : ITodoRepository
     {
         using var connection = new NpgsqlConnection(connectionString);
         
-        string cmd = "SELECT * FROM test_table;";
+        string sql = "SELECT * FROM test_table;";
         
         connection.Open();
-        using var command = new NpgsqlCommand(cmd,connection);
+        using var command = new NpgsqlCommand(sql,connection);
         var reader = command.ExecuteReader();
 
         List<Todo> result = new List<Todo>();
@@ -36,6 +36,23 @@ public class TodoRepository : ITodoRepository
 
     public void SaveTodo(Todo todo)
     {
-        throw new NotImplementedException();
+        using var connection = new NpgsqlConnection(connectionString);
+        string sql = $"INSERT INTO test_table VALUES (@GUID, @Name, @IsCompleted, @Created);";
+        
+        try
+        {
+            connection.Open();
+            using var command = new NpgsqlCommand(sql,connection);
+            command.Parameters.AddWithValue("@GUID", todo.Id);
+            command.Parameters.AddWithValue("@Name", todo.Name);
+            command.Parameters.AddWithValue("@IsCompleted", todo.Completed);
+            command.Parameters.AddWithValue("@Created", todo.Created);
+            command.ExecuteNonQuery();
+        }
+        catch (NpgsqlException ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
     }
 }

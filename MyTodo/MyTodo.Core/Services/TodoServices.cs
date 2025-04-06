@@ -1,4 +1,4 @@
-using MyTodo.Core.Domain;
+using MyTodo.Core.Models.Domain;
 using MyTodo.Core.Models.Dto;
 using MyTodo.Core.Repository;
 

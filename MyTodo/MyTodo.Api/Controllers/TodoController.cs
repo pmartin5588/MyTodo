@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using MyTodo.Api.Models;
+using MyTodo.Core.Models.Dto;
 using MyTodo.Core.Services;
 
 namespace MyTodo.Api.Controllers;
@@ -22,13 +23,23 @@ public class TodoController : Controller
     {
         try
         {
-            _todoServices.GetAllTodos();
-            return Ok();
+            return Ok(_todoServices.GetAllTodos());
         }
         catch
         {
             return StatusCode((int)HttpStatusCode.InternalServerError);
         }
-
+    }
+    
+    [HttpPost]
+    [Route("/todos")]
+    public void CreateTodo(CreateTodoRequest createTodoRequest)
+    {
+        CreateTodoDto createTodoDto = new CreateTodoDto
+        {
+            Name = createTodoRequest.Name
+        };
+        
+        _todoServices.CreateTodo(createTodoDto);
     }
 }
